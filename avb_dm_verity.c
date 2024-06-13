@@ -288,6 +288,13 @@ static AvbIOResult load_vbmeta_from_partition_footer(opt_t *opts, const char *na
                 NULL);
     }
 
+    if (vbmeta_offset > INT64_MAX) {
+        avb_debugv("vbmeta offset too large: %llu",
+                vbmeta_offset);
+        ret = AVB_IO_RESULT_ERROR_NO_SUCH_VALUE;
+        goto out;
+    }
+
     io_ret = read_from_partition(opts, fullname,
             vbmeta_offset, *vbmeta_size, *vbmeta_buf, &vbmeta_num_read);
     if (io_ret != AVB_IO_RESULT_OK) {
